@@ -1,0 +1,27 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.APiofTheDay>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Clean.Core.Models.ViewModels
+@{
+    Layout = "master.cshtml";
+    PictureOfTheDayAPIs pictureOfTheDay = new PictureOfTheDayAPIs();
+    var root = pictureOfTheDay.GetDailyPictureAsync();
+}
+
+@await Html.PartialAsync("~/Views/Partials/pageHeader.cshtml", new PageHeaderViewModel(Model.Name, Model.Title, Model.Subtitle, Model.MainImage))
+
+<article>
+    @Html.GetGridHtml(Model, "mainContent", "Clean")
+</article>
+
+<div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+    <h2>@(root.Result.title!) </h2>
+    @if(root.Result.url.Contains("youtube"))
+    {
+        <iframe height="500px" src=@root.Result.url> </iframe>
+    }
+    else
+    {
+        <img src=@root.Result.url>  </img>
+    }
+</div>
